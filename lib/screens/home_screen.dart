@@ -56,7 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("GAMER"),
+      ),
       body: Center(
           child: GridView.builder(
               itemCount: isLoading ? 6 : games.length,

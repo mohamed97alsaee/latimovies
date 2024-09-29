@@ -44,12 +44,34 @@ class GameCard extends StatelessWidget {
                           style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        Icon(
-                          gameModel.platform.contains("Windows")
-                              ? FontAwesomeIcons.computer
-                              : FontAwesomeIcons.globe,
-                          size: 16,
-                          color: Colors.white,
+                        Row(
+                          children: [
+                            if (gameModel.platform
+                                .toUpperCase()
+                                .contains("Windows".toUpperCase()))
+                              const Icon(
+                                FontAwesomeIcons.computer,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            if (gameModel.platform
+                                    .toUpperCase()
+                                    .contains("web".toUpperCase()) &&
+                                gameModel.platform
+                                    .toUpperCase()
+                                    .contains("Windows".toUpperCase()))
+                              const SizedBox(
+                                width: 15,
+                              ),
+                            if (gameModel.platform
+                                .toUpperCase()
+                                .contains("web".toUpperCase()))
+                              const Icon(
+                                FontAwesomeIcons.globe,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                          ],
                         )
                       ],
                     ),

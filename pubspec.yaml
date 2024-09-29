@@ -40,6 +40,7 @@ dependencies:
   http:
   shimmer:
   font_awesome_flutter:
+  fullscreen_image_viewer:
   auto_size_text:
 dev_dependencies:
   flutter_test:
