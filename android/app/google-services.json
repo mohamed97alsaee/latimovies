@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "183532005850",
+    "project_id": "lati-games",
+    "storage_bucket": "lati-games.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183532005850:android:49b6a2ed02dcd94800f8e3",
+        "android_client_info": {
+          "package_name": "com.example.latimovies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrRje_WePSDQQ3WoycS07aIe0nHUCNIoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

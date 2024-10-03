@@ -43,6 +43,13 @@ dependencies:
   fullscreen_image_viewer:
   auto_size_text:
   url_launcher:
+  firebase_core:
+  firebase_auth:
+  flutter_local_notifications:
+  permission_handler:
+  firebase_messaging:
+  cloud_firestore:
+  another_flushbar:
 dev_dependencies:
   flutter_test:
     sdk: flutter

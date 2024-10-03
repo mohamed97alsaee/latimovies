@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class GameModel {
+  String? uid;
   int id;
   String title;
   String thumbnail;
@@ -14,6 +15,7 @@ class GameModel {
   String freetogameProfileUrl;
 
   GameModel({
+    this.uid,
     required this.id,
     required this.title,
     required this.thumbnail,
@@ -33,6 +35,7 @@ class GameModel {
   String toRawJson() => json.encode(toJson());
 
   factory GameModel.fromJson(Map<String, dynamic> json) => GameModel(
+        uid: json.containsKey("uid") ? json["uid"] : null,
         id: json["id"],
         title: json["title"],
         thumbnail: json["thumbnail"],
@@ -47,6 +50,7 @@ class GameModel {
       );
 
   Map<String, dynamic> toJson() => {
+        'uid': uid,
         "id": id,
         "title": title,
         "thumbnail": thumbnail,

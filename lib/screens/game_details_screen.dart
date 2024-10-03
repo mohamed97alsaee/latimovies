@@ -42,8 +42,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
           ),
         ),
         body: Center(
-            child: gamesConsumer.isLoading &&
-                    gamesConsumer.detailedGameModel == null
+            child: gamesConsumer.busy && gamesConsumer.detailedGameModel == null
                 ? const CircularProgressIndicator()
                 : SingleChildScrollView(
                     child: Padding(
@@ -153,7 +152,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                     isShowMore
                                         ? "show less..."
                                         : "show more...",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       color: blueColor,
                                       fontWeight: FontWeight.bold,
@@ -180,31 +179,25 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                     onTap: () {
                                       FullscreenImageViewer.open(
                                         context: context,
-                                        child: Hero(
-                                          tag: 'hero',
-                                          child: Image.network(
-                                            gamesConsumer.detailedGameModel!
-                                                .screenshots[index].image,
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              return loadingProgress == null
-                                                  ? child
-                                                  : const Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    );
-                                            },
-                                          ),
+                                        child: Image.network(
+                                          gamesConsumer.detailedGameModel!
+                                              .screenshots[index].image,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            return loadingProgress == null
+                                                ? child
+                                                : const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                          },
                                         ),
                                       );
                                     },
-                                    child: Hero(
-                                      tag: "hero",
-                                      child: Image.network(
-                                          fit: BoxFit.cover,
-                                          gamesConsumer.detailedGameModel!
-                                              .screenshots[index].image),
-                                    ),
+                                    child: Image.network(
+                                        fit: BoxFit.cover,
+                                        gamesConsumer.detailedGameModel!
+                                            .screenshots[index].image),
                                   ),
                                 );
                               }),
@@ -242,6 +235,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(right: 16),
                                       child: GameCard(
+                                          onLongPress: () {},
                                           gameModel: gamesConsumer
                                               .similarGames[index]),
                                     ))),
