@@ -21,6 +21,15 @@ class AutheticationProvider extends BaseProvider {
     }
   }
 
+  Future<bool> resetPassword(String email) async {
+    setBusy(true);
+    firebaseAuth.sendPasswordResetEmail(email: email);
+
+    setBusy(false);
+
+    return true;
+  }
+
   Future<bool> createAccount(String name, String email, String password) async {
     UserCredential userCred = await firebaseAuth.createUserWithEmailAndPassword(
       email: email,

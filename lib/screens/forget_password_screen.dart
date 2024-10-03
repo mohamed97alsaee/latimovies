@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:latimovies/helpers/consts.dart';
 import 'package:latimovies/main.dart';
 import 'package:latimovies/providers/auth_provider.dart';
-import 'package:latimovies/screens/forget_password_screen.dart';
 import 'package:latimovies/screens/register_screen.dart';
 import 'package:latimovies/widgets/clickables/main_button.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -24,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: SafeArea(
           child: Padding(
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Login Screen",
+                    "Forget Password",
                     style: largeTitle,
                   ),
                   const SizedBox(
@@ -59,54 +59,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(12))),
                   ),
                   const SizedBox(
-                    height: 12,
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Password Cannot Be Empty.";
-                      }
-
-                      if (value.length < 8) {
-                        return "Password Must Be At Least 8 Characters.";
-                      }
-
-                      return null;
-                    },
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                        hintText: "Password",
-                        labelText: "Password",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12))),
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const ForgetPasswordScreen()));
-                          },
-                          child: const Text("Forget Password?")),
-                    ],
-                  ),
-                  const SizedBox(
                     height: 24,
                   ),
                   MainButton(
-                      label: "Login",
+                      label: "Reset Password",
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           Provider.of<AutheticationProvider>(context,
                                   listen: false)
-                              .login(
-                                  emailController.text, passwordController.text)
-                              .then((logedIn) {
-                            if (logedIn) {
+                              .resetPassword(emailController.text)
+                              .then((sent) {
+                            if (sent) {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   CupertinoPageRoute(
@@ -122,15 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  MainButton(
-                    label: "Create Account",
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => const RegisterScreen()));
-                    },
-                  )
                 ],
               ),
             ),

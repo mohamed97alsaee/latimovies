@@ -27,21 +27,24 @@ class MainButton extends StatelessWidget {
           onPressed();
         },
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 16),
-          child: inProgress
-              ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    backgroundColor: Colors.white24,
-                    strokeWidth: 2,
-                  ))
-              : Text(
-                  label,
-                  style: TextStyle(color: txtColor),
-                ),
-        ));
+            padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding, vertical: 16),
+            child: Row(
+              children: [
+                inProgress
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: Colors.white24,
+                          strokeWidth: 2,
+                        ))
+                    : Text(
+                        label,
+                        style: TextStyle(color: txtColor),
+                      ),
+              ],
+            )));
   }
 }
