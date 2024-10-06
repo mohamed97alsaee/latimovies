@@ -28,43 +28,51 @@ class _FavoriteGamesScreenState extends State<FavoriteGamesScreen> {
           title: const Text("FAVORITE GAMES"),
         ),
         body: Center(
-            child: GridView.builder(
-                itemCount:
-                    gamesConsumer.busy ? 6 : gamesConsumer.favGames.length,
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 0.7,
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) {
-                  return AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: gamesConsumer.busy
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Shimmer.fromColors(
-                                  baseColor: Colors.black12,
-                                  highlightColor: Colors.white38,
-                                  child: Container(
-                                    color: Colors.white,
-                                    height: double.infinity,
-                                    width: double.infinity,
-                                  )),
-                            )
-                          : GameCard(gameModel: gamesConsumer.favGames[index], onLongPress: (){
-
-
-                             showDialog(
-                              
-                                    context: context,
-                                    builder: (context) {
-                                      return DeleteFavoriteDialog(
-                                        gameModel: gamesConsumer.games[index],
-                                      );
-                                    });
-                          },));
-                })),
+            child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: !gamesConsumer.busy && gamesConsumer.favGames.isEmpty
+              ? const Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 35),
+                  child: Text("No Favorite Games"),
+                )
+              : GridView.builder(
+                  itemCount:
+                      gamesConsumer.busy ? 6 : gamesConsumer.favGames.length,
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 0.7,
+                      crossAxisCount: 2),
+                  itemBuilder: (context, index) {
+                    return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: gamesConsumer.busy
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Shimmer.fromColors(
+                                    baseColor: Colors.black12,
+                                    highlightColor: Colors.white38,
+                                    child: Container(
+                                      color: Colors.white,
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                    )),
+                              )
+                            : GameCard(
+                                gameModel: gamesConsumer.favGames[index],
+                                onLongPress: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return DeleteFavoriteDialog(
+                                          gameModel: gamesConsumer.games[index],
+                                        );
+                                      });
+                                },
+                              ));
+                  }),
+        )),
       );
     });
   }

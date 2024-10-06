@@ -39,7 +39,7 @@ class _DeleteFavoriteDialogState extends State<DeleteFavoriteDialog> {
                     label: "Delete",
                     onPressed: () async {
                       await Provider.of<GamesProvider>(context, listen: false)
-                          .deteleFromFavorite(widget.gameModel)
+                          .deleteFromFavorite(widget.gameModel)
                           .then((deleted) {
                         if (deleted) {
                           showFlush("Deleted", "Deleted Successfully", context);

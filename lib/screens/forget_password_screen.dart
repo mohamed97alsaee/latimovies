@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:latimovies/helpers/consts.dart';
 import 'package:latimovies/main.dart';
 import 'package:latimovies/providers/auth_provider.dart';
-import 'package:latimovies/screens/register_screen.dart';
 import 'package:latimovies/widgets/clickables/main_button.dart';
 import 'package:provider/provider.dart';
 

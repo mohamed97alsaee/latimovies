@@ -13,8 +13,9 @@ class GamesProvider extends BaseProvider {
 
   List<GameModel> games = [];
   List<GameModel> favGames = [];
+  List<GameModel> similarGames = [];
 
-  fetchGames(String platform) async {
+  Future<void> fetchGames(String platform) async {
     setBusy(true);
 
     games.clear();
@@ -37,7 +38,7 @@ class GamesProvider extends BaseProvider {
 // -------------------------- Detailed Game --------------------------
   DetailedGameModel? detailedGameModel;
 
-  fetchGameById(String id) async {
+  Future<void> fetchGameById(String id) async {
     setBusy(true);
 
     // games.clear();
@@ -56,8 +57,7 @@ class GamesProvider extends BaseProvider {
 
 // -------------------------- Similar Games --------------------------
 
-  List<GameModel> similarGames = [];
-  getGamesByCategory(String category) async {
+  Future<void> getGamesByCategory(String category) async {
     setBusy(true);
 
     similarGames.clear();
@@ -76,43 +76,15 @@ class GamesProvider extends BaseProvider {
     setBusy(true);
   }
 
-  Future<bool> addToFavorite(GameModel gameModel) async {
-    setBusy(true);
-    if (kDebugMode) {
-      print("FUNCTION : addToFavorite : ${gameModel.toJson()}");
-    }
-    bool added = false;
-    await getFavoriteGames().then((fetchedFavoriteGame) {
-      bool isExist = false;
-      for (var item in fetchedFavoriteGame) {
-        if (item.id == gameModel.id) {
-          isExist = true;
-          break;
-        }
-      }
-
-      if (!isExist) {
-        FirebaseFirestore.instance
-            .collection("favorite_games")
-            .add(gameModel.toJson());
-        added = true;
-      } else {
-        added = false;
-      }
-    });
-    setBusy(false);
-
-    return added;
-  }
-
   Future<List<GameModel>> getFavoriteGames() async {
     setBusy(true);
 
     List<GameModel> tgmList = [];
     if (FirebaseAuth.instance.currentUser != null) {
+      var uuid = FirebaseAuth.instance.currentUser!.uid;
       await FirebaseFirestore.instance
           .collection("favorite_games")
-          .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where("uid", isEqualTo: uuid)
           .get()
           .then((data) {
         if (data.docs.isNotEmpty) {
@@ -132,35 +104,81 @@ class GamesProvider extends BaseProvider {
     return tgmList;
   }
 
-  deteleFromFavorite(GameModel gameModel) async {
-    // setBusy(true);
-    // bool deleted = false;
-    // if (FirebaseAuth.instance.currentUser != null) {
-    //   await FirebaseFirestore.instance
-    //       .collection("favorite_games")
-    //       .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    //       .where("id", isEqualTo: gameModel.id)
-    //       .get()
-    //       .then((data) async {
-    //     if (data.docs.isNotEmpty) {
-    //       if (kDebugMode) {
-    //         print("DOC UID FROM DELETE ${data.docs.first.id.toString()}");
-    //       }
-    //       await FirebaseFirestore.instance
-    //           .collection("favorite_games")
-    //           .doc(data.docs.last.id)
-    //           .delete()
-    //           .then((d) {
-    //         getFavoriteGames();
-    //       });
+  // Add game to favorites (requires logged in user)
+  Future<bool> addToFavorite(GameModel gameModel) async {
+    setBusy(true);
 
-    //       deleted = true;
-    //     } else {
-    //       deleted = false;
-    //     }
-    //   });
-    // }
-    // setBusy(false);
-    // return deleted;
+    if (FirebaseAuth.instance.currentUser == null) {
+      return false; // User not logged in
+    }
+
+    final ref = FirebaseFirestore.instance.collection("favorite_games");
+    final existing = await ref
+        .where("id", isEqualTo: gameModel.id)
+        .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    try {
+      if (existing.docs.isEmpty) {
+        final jsonGame = gameModel.toJson();
+        jsonGame["uid"] = FirebaseAuth.instance.currentUser!.uid;
+        await ref.add(jsonGame);
+        return true;
+      } else {
+        return false; // Already favorited
+      }
+    } catch (error) {
+      // Handle errors here (e.g., print error message)
+      if (kDebugMode) {
+        print("ADD ERROE IS : $error");
+      }
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Delete game from favorites (requires logged in user)
+  Future<bool> deleteFromFavorite(GameModel gameModel) async {
+    setBusy(true);
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      if (kDebugMode) {
+        print("User not logged in ${FirebaseAuth.instance.currentUser!.uid}");
+      }
+      return false; // User not logged in
+    }
+
+    final ref = FirebaseFirestore.instance.collection("favorite_games");
+    final existing = await ref
+        .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    try {
+      if (existing.docs.isNotEmpty) {
+        await ref.doc(existing.docs.first.id).delete();
+        if (kDebugMode) {
+          print("DELETED");
+        }
+        getFavoriteGames();
+        return true;
+      } else {
+        if (kDebugMode) {
+          print("NOT FOUND");
+        }
+        return false; // Not found
+      }
+    } catch (error) {
+      // Handle errors here (e.g., print error message)
+      if (kDebugMode) {
+        print("DELETE ERROE IS : $error");
+      }
+      return false;
+    } finally {
+      if (kDebugMode) {
+        print("FINALLY");
+      }
+      setBusy(false);
+    }
   }
 }

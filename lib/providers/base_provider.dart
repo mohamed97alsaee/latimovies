@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 class BaseProvider with ChangeNotifier {
   bool busy = false;
 
   void setBusy(bool value) {
-    busy = value;
-    notifyListeners();
+    Timer(const Duration(milliseconds: 100), () {
+      busy = value;
+      notifyListeners();
+    });
   }
 }

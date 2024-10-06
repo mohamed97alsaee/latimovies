@@ -32,9 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Consumer<GamesProvider>(builder: (context, gamesConsumer, child) {
       return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          Provider.of<GamesProvider>(context, listen: false).getFavoriteGames();
-        }),
         drawer: Drawer(
           child: Column(
             children: [
@@ -70,8 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: const Icon(Icons.favorite))
           ],
         ),
-        body: Center(
-            child: GridView.builder(
+        body: Center(child: GridView.builder(
                 itemCount: gamesConsumer.busy ? 6 : gamesConsumer.games.length,
                 padding: const EdgeInsets.all(16),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
